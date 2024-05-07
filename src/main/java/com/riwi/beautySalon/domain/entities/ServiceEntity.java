@@ -40,7 +40,7 @@ public class ServiceEntity {
   @ToString.Exclude  //excluir del método to string
   @EqualsAndHashCode.Exclude  //para no ponerle identificador genérico
   @OneToMany(
-    mappedBy = "customer",
+    mappedBy = "service",
     fetch = FetchType.EAGER,
     cascade = CascadeType.ALL,
     orphanRemoval = false
