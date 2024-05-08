@@ -2,6 +2,7 @@ package com.riwi.beautySalon.infraestructure.abstract_services.service;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +16,8 @@ import com.riwi.beautySalon.domain.entities.ServiceEntity;
 import com.riwi.beautySalon.domain.repositories.ServiceRepository;
 import com.riwi.beautySalon.infraestructure.abstract_services.IServiceService;
 import com.riwi.beautySalon.utils.enums.SortType;
-
+import com.riwi.beautySalon.utils.exceptions.BadRequestException;
+import com.riwi.beautySalon.utils.messages.ErrorMessages;
 
 import lombok.AllArgsConstructor;
 
@@ -35,8 +37,7 @@ public class ServiceService implements IServiceService{
 
   @Override
   public ServiceResp get(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'get'");
+    return this.entityToResp(this.find(id));
   }
 
   @Override
@@ -94,6 +95,12 @@ public class ServiceService implements IServiceService{
         .price(request.getPrice())
         .description(request.getDescription())
         .build();
+  }
+
+  private ServiceEntity find(Long id){
+    return this.serviceRepository.findById(id)
+      .orElseThrow(() -> new BadRequestException(ErrorMessages.
+      idNotFound("Servicio")));
   }
 
 }
