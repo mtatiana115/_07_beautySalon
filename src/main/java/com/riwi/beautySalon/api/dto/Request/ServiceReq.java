@@ -19,6 +19,7 @@ public class ServiceReq {
   @NotBlank(message = "service name is required")
   private String name;
   private String description;
+  @NotNull(message = "the price is required")
   @DecimalMin(value = "0.01", message = "the value of the services must be lower than zero")
   private BigDecimal price;
 }
