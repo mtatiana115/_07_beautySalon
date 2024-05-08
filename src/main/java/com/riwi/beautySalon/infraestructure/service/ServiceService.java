@@ -1,4 +1,4 @@
-package com.riwi.beautySalon.infraestructure.abstract_services.service;
+package com.riwi.beautySalon.infraestructure.service;
 
 import java.util.List;
 
@@ -42,14 +42,18 @@ public class ServiceService implements IServiceService{
 
   @Override
   public ServiceResp update(ServiceReq request, Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'update'");
+    //validar que existe el id
+    ServiceEntity service = this.find(id);
+    //convertir el request a una entidad
+    service = this.requestToEntity(request);
+    service.setId(id);
+    //gusradar el id en un servicio para que se actualice en vez de agregar
+    return this.entityToResp(this.serviceRepository.save(service));
   }
 
   @Override
   public void delete(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    this.serviceRepository.delete(this.find(id));
   }
 
   @Override
