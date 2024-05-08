@@ -2,9 +2,6 @@ package com.riwi.beautySalon.api.dto.Request;
 
 import java.time.LocalDateTime;
 
-import com.riwi.beautySalon.api.dto.response.EmployeeResp;
-import com.riwi.beautySalon.api.dto.response.ServiceResp;
-
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

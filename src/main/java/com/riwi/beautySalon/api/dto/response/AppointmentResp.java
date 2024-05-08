@@ -18,5 +18,5 @@ public class AppointmentResp {
     private String comments;
     private BasicCustomerResp client;
     private ServiceResp service;
-    private EmployeeResp employee;
+    private CustomerResp customer;
 }

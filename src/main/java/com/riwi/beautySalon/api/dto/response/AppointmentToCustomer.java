@@ -17,5 +17,5 @@ public class AppointmentToCustomer {
     private Integer duration;
     private String comments;
     private ServiceResp service;
-    private EmployeeResp employee;
+    private CustomerResp customer;
 }
