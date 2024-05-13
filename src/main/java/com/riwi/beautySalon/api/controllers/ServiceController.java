@@ -25,7 +25,7 @@ import com.riwi.beautySalon.utils.enums.SortType;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping(path = "/service")
+@RequestMapping(path = "/services")
 @AllArgsConstructor
 public class ServiceController {
 
