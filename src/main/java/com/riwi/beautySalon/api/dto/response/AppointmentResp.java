@@ -16,7 +16,7 @@ public class AppointmentResp {
     private LocalDateTime dateTime;
     private Integer duration;
     private String comments;
-    private BasicCustomerResp client;
+    private BasicCustomerResp customer;
     private ServiceResp service;
-    private CustomerResp customer;
+    private EmployeeResp employee;
 }
