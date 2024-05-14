@@ -39,7 +39,7 @@ public class ServiceController {
     @RequestHeader(required = false) SortType sortType
   ){
     if (Objects.isNull(sortType)) {
-      sortType = sortType.NONE;
+      sortType = SortType.NONE;
     }
     return ResponseEntity.ok(this.iService.getAll(page -1, size, sortType));
   }
