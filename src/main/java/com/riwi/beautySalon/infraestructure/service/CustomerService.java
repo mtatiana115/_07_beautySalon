@@ -1,7 +1,7 @@
 package com.riwi.beautySalon.infraestructure.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -14,18 +14,19 @@ import org.springframework.stereotype.Service;
 import com.riwi.beautySalon.api.dto.Request.CustomerReq;
 import com.riwi.beautySalon.api.dto.response.AppointmentToCustomer;
 import com.riwi.beautySalon.api.dto.response.CustomerResp;
+import com.riwi.beautySalon.api.dto.response.EmployeeResp;
 import com.riwi.beautySalon.api.dto.response.ServiceResp;
 import com.riwi.beautySalon.domain.entities.Appointment;
 import com.riwi.beautySalon.domain.entities.Customer;
 import com.riwi.beautySalon.domain.repositories.CustomerRepository;
 import com.riwi.beautySalon.infraestructure.abstract_services.ICustomerService;
 import com.riwi.beautySalon.utils.enums.SortType;
+import com.riwi.beautySalon.utils.exceptions.BadRequestException;
+import com.riwi.beautySalon.utils.messages.ErrorMessages;
 
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
-@Transactional
 @AllArgsConstructor
 public class CustomerService implements ICustomerService{
 
@@ -34,26 +35,30 @@ public class CustomerService implements ICustomerService{
 
   @Override
   public CustomerResp create(CustomerReq request) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'create'");
+    Customer customer = this.requestToEntity(request);
+    customer.setAppointments(new ArrayList<>());
+    return this.entityToResp(this.customerRepository.save(customer));
   }
 
   @Override
   public CustomerResp get(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'get'");
+    return this.entityToResp(this.find(id));
   }
 
   @Override
   public CustomerResp update(CustomerReq request, Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'update'");
+    Customer customer = this.find(id);
+    Customer customerUpdate = this.requestToEntity(request);
+    customerUpdate.setId(id);
+    customerUpdate.setAppointments(customer.getAppointments());
+
+    return this.entityToResp(this.customerRepository.save(customerUpdate));
   }
 
   @Override
   public void delete(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    Customer customer = this.find(id);
+    this.customerRepository.delete(customer);
   }
 
   @Override
@@ -93,8 +98,8 @@ public class CustomerService implements ICustomerService{
     ServiceResp service = new ServiceResp();
     BeanUtils.copyProperties(entity.getService(), service);
 
-    CustomerResp customer = new CustomerResp();
-    BeanUtils.copyProperties(entity.getCustomer(), customer);
+    EmployeeResp employee = new EmployeeResp();
+    BeanUtils.copyProperties(entity.getEmployee(), employee);
 
     return AppointmentToCustomer.builder()
               .id(entity.getId())
@@ -102,7 +107,21 @@ public class CustomerService implements ICustomerService{
               .duration(entity.getDuration())
               .comments(entity.getComments())
               .service(service)
-              .customer(customer)
+              .employee(employee)
               .build();
+  }
+
+  private Customer requestToEntity(CustomerReq customer){
+    return Customer.builder()
+            .firstName(customer.getFirstName())
+            .lastName(customer.getLastName())
+            .phone(customer.getPhone())
+            .email(customer.getEmail())
+            .build();
+  }
+
+  private Customer find(Long id){
+    return this.customerRepository.findById(id)
+              .orElseThrow(() -> new BadRequestException(ErrorMessages.idNotFound("Customer")));
   }
 }
