@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,7 +21,7 @@ import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class JwtAuthenticationFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Autowired
   //Inyecto las dos dependencias 
@@ -29,6 +30,7 @@ public class JwtAuthenticationFilter {
   @Autowired
   private final UserDetailsService userDetailsService;
 
+  @Override
   public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
   throws IOException, ServletException {
 
