@@ -3,13 +3,16 @@ package com.riwi.beautySalon.infraestructure.helpers;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.riwi.beautySalon.domain.entities.User;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -48,4 +51,53 @@ public class JwtService {
 
     return this.getToken(claims, user);
   }
+
+  /*
+   * Método para obtener todos los claims (desarmar)
+   */
+
+  public Claims getAllClaims (String token){
+    return Jwts
+              .parser() //Dasarmamos el jwt
+              .verifyWith(this.getKey()) //Lo validamos ocn la firma del servidor
+              .build() // Lo construimos
+              .parseSignedClaims(token) // Convertir de base 64 a json el payLoad
+              .getPayload(); //extraemos la info del payload (cuerpo del jwt)
+  }
+
+  /*
+   * Obtiene un claim en especifico, quiere decir que recibe como parámetro el token y el claim a buscar, obtiene todos los claims pero retorna uno en especifico
+   */
+  public <T> T getClaim(String token, Function<Claims, T> claimsResolver){
+    final Claims claims = this.getAllClaims(token);
+    return claimsResolver.apply(claims);
+  }
+/*
+ * Obtiene el username del token
+ */
+  public String getUsernameFromToken (String token){
+    return this.getClaim(token, Claims :: getSubject);
+  }
+
+  /*
+   * Ex para traerme el día de expiración
+   * Obtiene la fecha de expiración del token
+   */
+
+  public Date getExpirationDate (String token){
+    return this.getClaim(token, Claims::getExpiration);
+  }
+  /*Método para validar el token */
+  public boolean isTokenExpired(String token){
+    return this.getExpirationDate(token).before(new Date());
+  }
+
+  public boolean isTokenValid(String token, UserDetails userDetails){
+    String username = this.getUsernameFromToken(token);
+
+    //Si el usuario que viene en el token es igual al de la db y además el token no está expirado entonces retorne verdadero
+    return (username.equals(userDetails.getUsername()) && !this.isTokenExpired(token));  
+  }
+
+
 }
