@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.riwi.beautySalon.api.dto.Request.LoginRequest;
 import com.riwi.beautySalon.api.dto.Request.RegisterRequest;
 import com.riwi.beautySalon.api.dto.response.AuthResp;
 import com.riwi.beautySalon.infraestructure.abstract_services.IAuthService;
@@ -25,8 +26,10 @@ public class AuthController {
   private final IAuthService iAuthService;
 
   @PostMapping(path = "/auth/login")
-  public String login(){
-    return "Haciendo el login";
+  public ResponseEntity<AuthResp> login(
+    @Validated @RequestBody LoginRequest request
+  ){
+    return ResponseEntity.ok(this.iAuthService.login(request));
   }
 
   @PostMapping(path = "/auth/register")
