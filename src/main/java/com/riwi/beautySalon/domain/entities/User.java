@@ -18,6 +18,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,6 +39,12 @@ private String username;
 private String password;
 @Enumerated(EnumType.STRING)
 private Role role;
+
+@OneToOne(mappedBy = "user")
+private Customer customer;
+
+@OneToOne(mappedBy = "user")
+private Employee employee;
 
 //Configurar los permisos de este usuario
 @Override

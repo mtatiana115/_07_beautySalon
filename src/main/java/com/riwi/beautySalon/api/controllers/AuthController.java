@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.riwi.beautySalon.api.dto.Request.CustomerRegisterRequest;
+import com.riwi.beautySalon.api.dto.Request.EmployeeRegisterReq;
 import com.riwi.beautySalon.api.dto.Request.LoginRequest;
 import com.riwi.beautySalon.api.dto.Request.RegisterRequest;
 import com.riwi.beautySalon.api.dto.response.AuthResp;
@@ -38,6 +40,20 @@ public class AuthController {
       
       return ResponseEntity.ok(this.iAuthService.register(request));
   }
+
+  @PostMapping (path = "/auth/register/customer")
+  public ResponseEntity<AuthResp> registerCustomer(
+    @Validated @RequestBody CustomerRegisterRequest request
+  ){
+    return ResponseEntity.ok(this.iAuthService.registerCustomer(request));
+  }
   
+  //para que el path no quede publico
+  @PostMapping(path = "/register/employee")
+  public ResponseEntity<AuthResp> registerEmployee(
+    @Validated @RequestBody EmployeeRegisterReq request
+  ){
+    return ResponseEntity.ok(this.iAuthService.registerEmployee(request));
+  }
 
 }

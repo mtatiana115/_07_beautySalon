@@ -72,6 +72,8 @@ public class EmployeeService implements IEmployeeService{
     }
 
     private EmployeeResp entityToResponse(Employee entity) {
+
+        System.out.println(entity);
         return EmployeeResp.builder()
                 .id(entity.getId())
                 .firstName(entity.getFirstName())

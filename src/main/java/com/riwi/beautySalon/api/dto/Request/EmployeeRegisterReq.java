@@ -7,15 +7,17 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeReq {
+public class EmployeeRegisterReq extends RegisterRequest{
   @NotBlank(message = "The name is required")
   private String firstName;
   @NotBlank(message = "The lastname is required")
@@ -32,6 +34,6 @@ public class EmployeeReq {
     max = 100,
     message = "the email must be between 5 and 100 characteres")
   private String email;
-@NotNull(message = "rol is required")
+  @NotNull(message = "rol is required")
   private RoleEmployee role;
 }

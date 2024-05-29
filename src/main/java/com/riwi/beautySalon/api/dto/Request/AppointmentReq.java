@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentReq {
-  @NotBlank(message = "date and time is required")
+  @NotNull(message = "date and time is required")
   private LocalDateTime dateTime;
   //Se debe validar desde el servicio que la cita no sea menos que la de ayer
   @Min(value = 10, message = "the duration can not be downer than 10")
